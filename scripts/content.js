@@ -38,12 +38,12 @@ function concatenateTexts(array) {
   return result;
 }
 
-function findNodesBySubstring(array, searchObjects) {
+function findNodesBySubstring(array) {
   let allSubstringNodes = [];
 
-  for (let searchObject in searchObjects) {
-    for(let i=0; i<searchObjects[searchObject].strings.length; i++){
-      let substring = searchObjects[searchObject].strings[i];
+  for (let i = 0; i < searchObjects.length; i++) {
+    for(let j = 0; j < searchObjects[i].strings.length; j++){
+      let substring = searchObjects[i].strings[j];
       let startIndex = 0;
       let endIndex = 0;
 
@@ -60,7 +60,7 @@ function findNodesBySubstring(array, searchObjects) {
         substringNodes.forEach(node => {
           allSubstringNodes.push({
             node: node.node,
-            searchObject: searchObjects[searchObject],
+            searchObjectID: i,
             startIndex: node.start,
             endIndex: node.end
           });
@@ -137,15 +137,17 @@ function highlightNode(node, nodeDataArray) {
 
     let markedText = nodeText.substring(nodeData.startIndex, nodeData.endIndex);
     let markedNode = document.createElement('mark');
+    markedNode.className = 'search-object';
+    markedNode.setAttribute('data-search-object-id', nodeData.searchObjectID);
     markedNode.appendChild(document.createTextNode(markedText));
-    markedNode.style.backgroundColor = nodeData.searchObject.color;
+    markedNode.style.backgroundColor = searchObjects[nodeData.searchObjectID].color;
     
     markedNode.onmouseover = (event) =>
     {
         var tooltip = document.createElement('div');
         document.body.appendChild(tooltip);
         
-        tooltip.textContent = nodeData.searchObject.strings[0];
+        tooltip.textContent = searchObjects[nodeData.searchObjectID].description;
         tooltip.className = 'tooltip';
         
         let rect = event.target.getBoundingClientRect();

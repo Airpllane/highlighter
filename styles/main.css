@@ -1,6 +1,10 @@
 .tooltip 
 {
     position: absolute;
+    padding: 10px;
     display: block;
-    border-bottom: 1px dotted black;
+    border: 1px dotted black;
+    background-color: #2e2e2e;
+    color: aliceblue;
+    font-size: large;
 }
