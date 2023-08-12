@@ -157,6 +157,7 @@ console.log("TEST")
 
 const parent = document;
 const generatedArray = depthFirstTraversal(parent);
+/*
 const searchObjects = {
   "n1": {
     "strings": ["綾小路清隆", "綾小路", "清隆"],
@@ -175,7 +176,15 @@ const searchObjects = {
     "color": "#DFFF00"
   }
 }
-console.log(findNodesBySubstring(generatedArray, searchObjects))
+*/
+var searchObjects;
+chrome.storage.sync.get(["searchJSON"]).then((result) =>
+{
+    searchObjects = JSON.parse(result.searchJSON);
+    console.log(findNodesBySubstring(generatedArray, searchObjects));
+    highlightSubstringNodes(findNodesBySubstring(generatedArray, searchObjects));
+});
 
 
-highlightSubstringNodes(findNodesBySubstring(generatedArray, searchObjects))
+
+

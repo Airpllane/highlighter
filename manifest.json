@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Names",
+  "options_page": "options.html",
   "description": "Names description",
   "version": "1.0",
   "icons": {
@@ -16,5 +17,8 @@
         "<all_urls>"
       ]
     }
+  ],
+  "permissions": [
+    "storage"
   ]
 }
