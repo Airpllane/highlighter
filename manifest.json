@@ -2,6 +2,20 @@
   "manifest_version": 3,
   "name": "Names",
   "options_page": "options.html",
+  
+  "browser_specific_settings": {
+    "gecko": {
+    "id": "extensionname@example.org",
+    "strict_min_version": "42.0"
+    }
+    },
+
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true,
+    "open_in_tab": true
+  },
+
   "description": "Names description",
   "version": "1.0",
   "icons": {
