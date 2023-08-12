@@ -1,0 +1,6 @@
+.tooltip 
+{
+    position: absolute;
+    display: block;
+    border-bottom: 1px dotted black;
+}

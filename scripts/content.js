@@ -139,6 +139,26 @@ function highlightNode(node, nodeDataArray) {
     let markedNode = document.createElement('mark');
     markedNode.appendChild(document.createTextNode(markedText));
     markedNode.style.backgroundColor = nodeData.searchObject.color;
+    
+    markedNode.onmouseover = (event) =>
+    {
+        var tooltip = document.createElement('div');
+        document.body.appendChild(tooltip);
+        
+        tooltip.textContent = nodeData.searchObject.strings[0];
+        tooltip.className = 'tooltip';
+        
+        let rect = event.target.getBoundingClientRect();
+        tooltip.style.left = rect.left + window.scrollX + 'px';
+        tooltip.style.top = rect.top + window.scrollY + rect.height + 'px';
+        markedNode.onmouseout = () =>
+        {
+            console.log('onmouseleave');
+            tooltip.remove();
+        }
+    }
+
+    
 
     parentNode.insertBefore(beforeMarkNode, node);
     parentNode.insertBefore(markedNode, node);

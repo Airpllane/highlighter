@@ -26,10 +26,11 @@
   },
   "content_scripts": [
     {
-      "js": ["scripts/content.js"],
-      "matches": [
-        "<all_urls>"
-      ]
+        "css": [ "styles/main.css" ],
+        "js": ["scripts/content.js"],
+        "matches": [
+            "<all_urls>"
+        ]
     }
   ],
   "permissions": [
