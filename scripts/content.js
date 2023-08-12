@@ -1,3 +1,25 @@
+var isActive = false;
+
+const parent = document;
+const generatedArray = depthFirstTraversal(parent);
+
+var searchObjects;
+
+chrome.storage.sync.get(["searchJSON"]).then((result) =>
+{
+    searchObjects = JSON.parse(result.searchJSON);
+    highlightAll();
+});
+
+document.onkeydown = (event) =>
+{
+    if (event.repeat) return;
+    if(event.ctrlKey && event.shiftKey && event.code == "Backquote")
+    {
+        switchActive();
+    }
+};
+
 function depthFirstTraversal(node) {
   let charsNum = 0;
   let result = [];
@@ -144,6 +166,7 @@ function highlightNode(node, nodeDataArray) {
     
     markedNode.onmouseover = (event) =>
     {
+        if(!isActive) return;
         var tooltip = document.createElement('div');
         document.body.appendChild(tooltip);
         
@@ -155,7 +178,6 @@ function highlightNode(node, nodeDataArray) {
         tooltip.style.top = rect.top + window.scrollY + rect.height + 'px';
         markedNode.onmouseout = () =>
         {
-            console.log('onmouseleave');
             tooltip.remove();
         }
     }
@@ -175,38 +197,45 @@ function highlightNode(node, nodeDataArray) {
 
   parentNode.removeChild(node);
 }
-console.log("TEST")
 
-const parent = document;
-const generatedArray = depthFirstTraversal(parent);
-/*
-const searchObjects = {
-  "n1": {
-    "strings": ["綾小路清隆", "綾小路", "清隆"],
-    "color": "#AFE1AF"
-  },
-  "n2": {
-    "strings": ["堀北鈴音", "堀北", "鈴音"],
-    "color": "#FF5733"
-  },
-  "n3": {
-    "strings": ["櫛田桔梗", "櫛田", "桔梗"],
-    "color": "#00FFFF"
-  },
-  "n4": {
-    "strings": ["須藤健", "須藤", "健"],
-    "color": "#DFFF00"
-  }
-}
-*/
-var searchObjects;
-chrome.storage.sync.get(["searchJSON"]).then((result) =>
+function switchActive()
 {
-    searchObjects = JSON.parse(result.searchJSON);
-    console.log(findNodesBySubstring(generatedArray, searchObjects));
-    highlightSubstringNodes(findNodesBySubstring(generatedArray, searchObjects));
-});
+    if(isActive)
+    {   
+        clearAll();
+    }
+    else
+    {
+        showAll();
+    }
+}
 
+function highlightAll()
+{
+    if(isActive) return;
+    highlightSubstringNodes(findNodesBySubstring(generatedArray, searchObjects));
+    isActive = !isActive;
+}
+
+function showAll()
+{
+    if(isActive) return;
+    document.querySelectorAll('.search-object').forEach((element) =>
+    {
+        element.style.backgroundColor = searchObjects[element.getAttribute('data-search-object-id')].color;   
+    });
+    isActive = !isActive;
+}
+
+function clearAll()
+{
+    if(!isActive) return;
+    document.querySelectorAll('.search-object').forEach((element) =>
+    {
+        element.style.backgroundColor = '#00000000';   
+    });
+    isActive = !isActive;
+}
 
 
 
