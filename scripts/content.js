@@ -1,3 +1,4 @@
+console.log("START")
 var isActive = false;
 
 const parent = document;
@@ -236,6 +237,3 @@ function clearAll()
     });
     isActive = !isActive;
 }
-
-
-
