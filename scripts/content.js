@@ -65,8 +65,8 @@ function findNodesBySubstring(array) {
   let allSubstringNodes = [];
 
   for (let i = 0; i < searchObjects.length; i++) {
-    for(let j = 0; j < searchObjects[i].strings.length; j++){
-      let substring = searchObjects[i].strings[j];
+    for(let j = 0; j < searchObjects[i].aliases.length; j++){
+      let substring = searchObjects[i].aliases[j];
       let startIndex = 0;
       let endIndex = 0;
 
@@ -111,12 +111,12 @@ function isNodeOverlapping(node, startIndex, endIndex) {
 function getSubstringNode(node, startIndex, endIndex) {
   const nodeStart = node.start;
 
-  const nodeSubstringStart = Math.max(startIndex - nodeStart, 0);
+  const nodeSubaliasestart = Math.max(startIndex - nodeStart, 0);
   const nodeSubstringEnd = Math.min(endIndex - nodeStart, node.text.length);
 
   return {
     node: node.node,
-    start: nodeSubstringStart,
+    start: nodeSubaliasestart,
     end: nodeSubstringEnd
   };
 }

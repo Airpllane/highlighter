@@ -7,14 +7,14 @@ export function createSearchObjectsTable(tableData, divID)
             label:"Add Row",
             action:function(e, row)
             {
-                
+                row.getTable().addData([{aliases:["New"], color:'#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'), description:"New description"}], false);
             }
         },
         {
             label:"Delete Row",
             action:function(e, row)
             {
-                
+                row.delete();
             }
         }
     ];
@@ -26,6 +26,7 @@ export function createSearchObjectsTable(tableData, divID)
         height: 500,
         rowContextMenu: rowMenu,
         movableColumns:true,
+        movableRows: true,
         columns:
         [
             {
