@@ -172,7 +172,7 @@ function highlightNode(node, nodeDataArray) {
         document.body.appendChild(tooltip);
         
         tooltip.textContent = searchObjects[nodeData.searchObjectID].description;
-        tooltip.className = 'tooltip';
+        tooltip.className = 'searchObjectTooltip';
         
         let rect = event.target.getBoundingClientRect();
         tooltip.style.left = rect.left + window.scrollX + 'px';
