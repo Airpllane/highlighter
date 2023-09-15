@@ -78,17 +78,9 @@ function restoreOptions()
 {
     chrome.storage.sync.get("settingsJSON").then((result) =>
     {
-        try
-        {
-            settingsJSON = result.settingsJSON;
-            loadTable();
-            document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
-        }
-        catch(e)
-        {
-            console.log('invalid JSON:');
-            console.log(e);   
-        }
+        settingsJSON = result.settingsJSON;
+        loadTable();
+        document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
     });
 }
 
