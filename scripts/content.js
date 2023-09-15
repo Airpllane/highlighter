@@ -6,9 +6,9 @@ const generatedArray = depthFirstTraversal(parent);
 
 var searchObjects;
 
-chrome.storage.sync.get(["searchJSON"]).then((result) =>
+chrome.storage.sync.get(["settingsJSON"]).then((result) =>
 {
-    searchObjects = JSON.parse(result.searchJSON);
+    searchObjects = result.settingsJSON.searchObjectGroups[result.settingsJSON.currentObjectGroup];
     highlightAll();
 });
 
