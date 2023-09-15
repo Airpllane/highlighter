@@ -38,7 +38,7 @@ const defaultSettings = JSON.parse(`{
     ]
 }`);
 
-function saveTextOptions ()
+function saveTextOptions()
 {
     settingsJSON = JSON.parse(document.getElementById("settingsJSON").value);
   
@@ -56,27 +56,25 @@ function saveTextOptions ()
     );
 }
 
-function saveTableOptions () //redo
+function saveTableOptions()
 {
-    //const settingsJSON = JSON.stringify(searchObjectsTable.getData(), null, 2);
-    settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup] = searchObjectsTable.getData;
+    settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup] = searchObjectsTable.getData();
     chrome.storage.sync.set(
         { settingsJSON: settingsJSON },
         () => {
             const status = document.getElementById('status');
             status.textContent = 'Options saved.';
-            setTimeout(() => {
-            status.textContent = '';
+            setTimeout(() => 
+            {
+                status.textContent = '';
             }, 750);
-
             loadTable();
         }
     );
-
     document.getElementById("settingsJSON").value = JSON.stringify(settingsJSON, null, 2);
 }
   
-function restoreOptions ()
+function restoreOptions()
 {
     chrome.storage.sync.get("settingsJSON").then((result) =>
     {
