@@ -38,47 +38,51 @@ const defaultSettings = JSON.parse(`{
     ]
 }`);
 
-function saveTextOptions()
+async function saveOptions()
 {
-    settingsJSON = JSON.parse(document.getElementById("settingsJSON").value);
-  
-    chrome.storage.sync.set(
-      { settingsJSON: settingsJSON },
-      () => {
-        const status = document.getElementById('status');
-        status.textContent = 'Options saved.';
-        setTimeout(() => {
-          status.textContent = '';
-        }, 750);
-
-        loadTable();
-      }
-    );
-}
-
-function saveTableOptions()
-{
-    settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup] = searchObjectsTable.getData();
     chrome.storage.sync.set(
         { settingsJSON: settingsJSON },
         () => {
             const status = document.getElementById('status');
             status.textContent = 'Options saved.';
-            setTimeout(() => 
-            {
-                status.textContent = '';
+            setTimeout(() => {
+            status.textContent = '';
             }, 750);
-            loadTable();
         }
     );
     document.getElementById("settingsJSON").value = JSON.stringify(settingsJSON, null, 2);
 }
-  
+
+function saveTextOptions()
+{
+    settingsJSON = JSON.parse(document.getElementById("settingsJSON").value);
+    saveOptions().then(() => {loadTable()});
+}
+
+function saveTableOptions()
+{
+    settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup] = searchObjectsTable.getData();
+    saveOptions().then(() => {loadTable()});
+}
+
+function selectObjectGroup()
+{
+    settingsJSON.currentObjectGroup = document.getElementById('search-object-groups').value;
+    saveOptions().then(() => {loadTable()});
+}
+
 function restoreOptions()
 {
     chrome.storage.sync.get("settingsJSON").then((result) =>
     {
         settingsJSON = result.settingsJSON;
+        for(let i = 0; i < settingsJSON.searchObjectGroups.length; i++)
+        {
+            var option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            document.getElementById('search-object-groups').appendChild(option);
+        }
         loadTable();
         document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
     });
@@ -86,7 +90,6 @@ function restoreOptions()
 
 function loadTable()
 {
-    console.log(settingsJSON);
     searchObjectsTable = createSearchObjectsTable(settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup], "#search-objects-table");
 }
 
@@ -99,6 +102,7 @@ function resetStorage()
 
   
 document.addEventListener('DOMContentLoaded', restoreOptions);
+document.getElementById('search-object-groups').addEventListener('change', selectObjectGroup)
 document.getElementById('save-text').addEventListener('click', saveTextOptions);
 document.getElementById('save-table').addEventListener('click', saveTableOptions);
 document.getElementById('reset').addEventListener('click', resetStorage);
