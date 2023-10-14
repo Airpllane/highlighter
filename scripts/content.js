@@ -1,5 +1,3 @@
-import { search } from "./page-searcher";
-
 console.log("START");
 var isActive = false;
 

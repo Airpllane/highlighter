@@ -1,4 +1,4 @@
-export default function search(parent, searchObjects)
+function search(parent, searchObjects)
 {
     function depthFirstTraversal(node)
     {
