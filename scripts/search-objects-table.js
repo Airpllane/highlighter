@@ -28,7 +28,14 @@ export function createSearchObjectsTable(tableData, divID)
                     {
                         title: "Aliases",
                         field: "aliases",
-                        editor: aliasesEditor
+                        editor: aliasesEditor,
+                        formatter: function (cell)
+                        {
+                            var element = cell.getElement();
+                            element.style.fontFamily = "Yu Gothic";
+                            element.style.fontSize = "20px";
+                            return cell.getValue().join(', ');
+                        }
                     },
                     {
                         title: "Description",
@@ -142,7 +149,14 @@ function aliasesEditor(cell, onRendered, success, cancel)
             {
                 title: "Alias",
                 field: "alias",
-                editor: "input"
+                editor: "input",
+                formatter: function (cell)
+                {
+                    var element = cell.getElement();
+                    element.style.fontFamily = "Yu Gothic";
+                    element.style.fontSize = "20px";
+                    return cell.getValue();
+                }
             }
         ]
     });
