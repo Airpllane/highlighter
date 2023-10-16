@@ -151,17 +151,90 @@ function aliasesEditor(cell, onRendered, success, cancel)
                 field: "alias",
                 editor: function (cell, onRendered, success, cancel, editorParams)
                 {
-                    var editor = document.createElement("input");
-                    editor.value = cell.getValue();
+                    var cellValue = cell.getValue(),
+                        input = document.createElement("input");
 
-                    editor.style.fontFamily = "Yu Gothic";
-                    editor.style.fontSize = "20px";
+                    input.setAttribute("type", editorParams.search ? "search" : "text");
 
-                    onRendered(() => { editor.focus(); });
-                    editor.addEventListener("change", () => success(editor.value));
-                    editor.addEventListener("blur", () => success(editor.value));
+                    input.style.padding = "4px";
+                    input.style.width = "100%";
+                    input.style.boxSizing = "border-box";
+                    input.style.fontFamily = "Yu Gothic";
+                    input.style.fontSize = "20px";
 
-                    return editor;
+                    if (editorParams.elementAttributes && typeof editorParams.elementAttributes == "object")
+                    {
+                        for (let key in editorParams.elementAttributes)
+                        {
+                            if (key.charAt(0) == "+")
+                            {
+                                key = key.slice(1);
+                                input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+                            } else
+                            {
+                                input.setAttribute(key, editorParams.elementAttributes[key]);
+                            }
+                        }
+                    }
+
+                    input.value = typeof cellValue !== "undefined" ? cellValue : "";
+
+                    onRendered(function ()
+                    {
+                        if (cell.getType() === "cell")
+                        {
+                            input.focus({ preventScroll: true });
+                            input.style.height = "100%";
+
+                            if (editorParams.selectContents)
+                            {
+                                input.select();
+                            }
+                        }
+                    });
+
+                    function onChange(e)
+                    {
+                        if (((cellValue === null || typeof cellValue === "undefined") && input.value !== "") || input.value !== cellValue)
+                        {
+                            if (success(input.value))
+                            {
+                                cellValue = input.value;
+                            }
+                        } else
+                        {
+                            cancel();
+                        }
+                    }
+
+                    input.addEventListener("change", onChange);
+                    input.addEventListener("blur", onChange);
+
+                    input.addEventListener("keydown", function (e)
+                    {
+                        switch (e.keyCode)
+                        {
+                            case 13:
+                                onChange(e);
+                                break;
+
+                            case 27:
+                                cancel();
+                                break;
+
+                            case 35:
+                            case 36:
+                                e.stopPropagation();
+                                break;
+                        }
+                    });
+
+                    if (editorParams.mask)
+                    {
+                        maskInput(input, editorParams);
+                    }
+
+                    return input;
                 },
                 formatter: function (cell)
                 {
