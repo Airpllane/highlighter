@@ -149,7 +149,20 @@ function aliasesEditor(cell, onRendered, success, cancel)
             {
                 title: "Alias",
                 field: "alias",
-                editor: "input",
+                editor: function (cell, onRendered, success, cancel, editorParams)
+                {
+                    var editor = document.createElement("input");
+                    editor.value = cell.getValue();
+
+                    editor.style.fontFamily = "Yu Gothic";
+                    editor.style.fontSize = "20px";
+
+                    onRendered(() => { editor.focus(); });
+                    editor.addEventListener("change", () => success(editor.value));
+                    editor.addEventListener("blur", () => success(editor.value));
+
+                    return editor;
+                },
                 formatter: function (cell)
                 {
                     var element = cell.getElement();
