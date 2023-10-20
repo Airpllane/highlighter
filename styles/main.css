@@ -8,3 +8,63 @@
     color: aliceblue;
     font-size: large;
 }
+
+.container
+{
+    margin: 15px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-flow: row;
+    overflow: auto;
+}
+
+.table-container
+{
+    width: 500px;
+    margin-right: 10px;
+    display: flex;
+    flex-flow: column;
+}
+
+.options-container
+{
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+.options-button
+{
+    margin: 5px;
+    padding: 5px;
+    color: white;
+    background-color: #2e2e2e;
+    border-radius: 5px;
+    width: fit-content;
+}
+
+.options-select
+{
+    width: fit-content;
+}
+
+.search-objects-table
+{
+    width: 500px;
+}
+
+.title
+{
+    font-size: large;
+    font-weight: bold;
+    margin: auto;
+}
+
+@media screen and (max-width: 1500px)
+{
+    .container {flex-flow: column;}
+    .table-container {width: 100%;}
+    .search-objects-table {width: 100%;}
+}
