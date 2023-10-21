@@ -4,8 +4,10 @@ import {createSearchObjectsTable} from "./scripts/search-objects-table.js"
 var searchObjectsTable = undefined;
 var settingsJSON = undefined;
 const defaultSettings = JSON.parse(`{
-    "currentObjectGroup": 0,
-    "searchObjectGroups": [
+    "currentObjectGroup": "first",
+    "searchObjectGroups": 
+    {
+        "first":
         [
             {
             "aliases": ["綾小路清隆", "綾小路", "清隆"],
@@ -23,6 +25,7 @@ const defaultSettings = JSON.parse(`{
             "description": "character 2"
             }
         ],
+        "second":
         [
             {
             "aliases": ["須藤健", "須藤", "健"],
@@ -35,7 +38,7 @@ const defaultSettings = JSON.parse(`{
             "description": "character 4"
             }
         ]
-    ]
+    }
 }`);
 
 async function saveOptions()
@@ -67,7 +70,7 @@ function saveTableOptions()
 
 function selectObjectGroup()
 {
-    settingsJSON.currentObjectGroup = document.getElementById('search-object-groups').value;
+    settingsJSON.currentObjectGroup = document.getElementById('search-object-groups-select').value;
     saveOptions().then(() => {loadTable()});
 }
 
@@ -76,12 +79,12 @@ function restoreOptions()
     chrome.storage.sync.get("settingsJSON").then((result) =>
     {
         settingsJSON = result.settingsJSON;
-        for(let i = 0; i < settingsJSON.searchObjectGroups.length; i++)
+        for (let key of Object.keys(settingsJSON.searchObjectGroups)) 
         {
             var option = document.createElement("option");
-            option.value = i;
-            option.textContent = i;
-            document.getElementById('search-object-groups').appendChild(option);
+            option.value = key;
+            option.textContent = key;
+            document.getElementById('search-object-groups-select').appendChild(option);
         }
         loadTable();
         document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
@@ -102,7 +105,7 @@ function resetStorage()
 
   
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.getElementById('search-object-groups').addEventListener('change', selectObjectGroup)
+document.getElementById('search-object-groups-select').addEventListener('change', selectObjectGroup)
 document.getElementById('save-text').addEventListener('click', saveTextOptions);
 document.getElementById('save-table').addEventListener('click', saveTableOptions);
 document.getElementById('reset').addEventListener('click', resetStorage);
