@@ -8,17 +8,22 @@
         <div class="highlighter-table-container">
             <div class="highlighter-title">Search objects</div>
             <div id="search-objects-table" class="highlighter-search-objects-table"></div>
-            <button id="save-table" class="highlighter-options-button">Save</button>
+            <button id="save-table-button" class="highlighter-options-button">Save</button>
         </div>
         <div class="highlighter-options-container">
             <div class="highlighter-title">Options</div>
             <div id="status"></div>
             <select id="search-object-groups-select" class="highlighter-options-select"></select>
+            <div>
+                <button id="new-object-group-button" class="highlighter-options-button">New group</button>
+                <button id="delete-object-group-button" class="highlighter-options-button">Delete group</button>
+            </div>
             <div class="highlighter-title">JSON</div>
             <textarea id="settingsJSON" style="height: 500px;"></textarea>
             <div>
-                <button id="save-text" class="highlighter-options-button">Save</button>
-                <button id="reset" class="highlighter-options-button">Reset</button>
+                <button id="save-text-button" class="highlighter-options-button">Save from textarea</button>
+                <button id="save-button" class="highlighter-options-button">Apply changes</button>
+                <button id="reset-button" class="highlighter-options-button">Reset</button>
             </div>
         </div>
     </div>

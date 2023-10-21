@@ -53,7 +53,7 @@ async function saveOptions()
             }, 750);
         }
     );
-    document.getElementById("settingsJSON").value = JSON.stringify(settingsJSON, null, 2);
+    fillTextarea();
 }
 
 function saveTextOptions()
@@ -72,6 +72,47 @@ function selectObjectGroup()
 {
     settingsJSON.currentObjectGroup = document.getElementById('search-object-groups-select').value;
     saveOptions().then(() => {loadTable()});
+    document.getElementById('save-button').disabled = false;
+}
+
+function newObjectGroup()
+{
+    if (settingsJSON.searchObjectGroups.newGroup != undefined) { return; }
+    clearObjectGroups();
+    settingsJSON.searchObjectGroups['newGroup'] = [];
+    settingsJSON.currentObjectGroup = 'newGroup';
+    fillObjectGroups();
+    loadTable();
+    fillTextarea();
+    document.getElementById('save-button').disabled = false;
+}
+
+function deleteObjectGroup()
+{
+    clearObjectGroups();
+    delete settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup];
+    settingsJSON.currentObjectGroup = Object.keys(settingsJSON.searchObjectGroups)[0];
+    fillObjectGroups();
+    loadTable();
+    fillTextarea();
+    document.getElementById('save-button').disabled = false;
+}
+
+function clearObjectGroups()
+{
+    document.getElementById('search-object-groups-select').replaceChildren();
+}
+
+function fillObjectGroups()
+{
+    for (let key of Object.keys(settingsJSON.searchObjectGroups)) 
+    {
+        var option = document.createElement("option");
+        option.value = key;
+        option.textContent = key;
+        document.getElementById('search-object-groups-select').appendChild(option);
+    }
+    document.getElementById('search-object-groups-select').value = settingsJSON.currentObjectGroup;
 }
 
 function restoreOptions()
@@ -79,16 +120,16 @@ function restoreOptions()
     chrome.storage.sync.get("settingsJSON").then((result) =>
     {
         settingsJSON = result.settingsJSON;
-        for (let key of Object.keys(settingsJSON.searchObjectGroups)) 
-        {
-            var option = document.createElement("option");
-            option.value = key;
-            option.textContent = key;
-            document.getElementById('search-object-groups-select').appendChild(option);
-        }
+        fillObjectGroups();
         loadTable();
-        document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
+        fillTextarea();
+        document.getElementById('save-button').disabled = true;
     });
+}
+
+function fillTextarea()
+{
+    document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
 }
 
 function loadTable()
@@ -106,6 +147,9 @@ function resetStorage()
   
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.getElementById('search-object-groups-select').addEventListener('change', selectObjectGroup)
-document.getElementById('save-text').addEventListener('click', saveTextOptions);
-document.getElementById('save-table').addEventListener('click', saveTableOptions);
-document.getElementById('reset').addEventListener('click', resetStorage);
+document.getElementById('save-text-button').addEventListener('click', saveTextOptions);
+document.getElementById('save-button').addEventListener('click', saveOptions);
+document.getElementById('save-table-button').addEventListener('click', saveTableOptions);
+document.getElementById('reset-button').addEventListener('click', resetStorage);
+document.getElementById('new-object-group-button').addEventListener('click', newObjectGroup);
+document.getElementById('delete-object-group-button').addEventListener('click', deleteObjectGroup);

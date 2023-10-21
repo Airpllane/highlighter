@@ -45,6 +45,16 @@
     width: fit-content;
 }
 
+.highlighter-options-button:disabled
+{
+    margin: 5px;
+    padding: 5px;
+    color: white;
+    background-color: darkgray;
+    border-radius: 5px;
+    width: fit-content;
+}
+
 .highlighter-options-select
 {
     width: fit-content;
