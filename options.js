@@ -4,41 +4,47 @@ import {createSearchObjectsTable} from "./scripts/search-objects-table.js"
 var searchObjectsTable = undefined;
 var settingsJSON = undefined;
 const defaultSettings = JSON.parse(`{
-    "currentObjectGroup": "first",
+    "currentObjectGroup": "0",
     "searchObjectGroups": 
-    {
-        "first":
-        [
-            {
-            "aliases": ["綾小路清隆", "綾小路", "清隆"],
-            "color": "#AFE1AF",
-            "description": "character 0"
-            },
-            {
-            "aliases": ["堀北鈴音", "堀北", "鈴音"],
-            "color": "#FF5733",
-            "description": "character 1"
-            },
-            {
-            "aliases": ["櫛田桔梗", "櫛田", "桔梗"],
-            "color": "#00FFFF",
-            "description": "character 2"
-            }
-        ],
-        "second":
-        [
-            {
-            "aliases": ["須藤健", "須藤", "健"],
-            "color": "#DFFF00",
-            "description": "character 3"
-            },
-            {
-            "aliases": ["軽井沢恵", "軽井沢", "恵"],
-            "color": "#DF00FF",
-            "description": "character 4"
-            }
-        ]
-    }
+    [
+        {
+            "name": "first",
+            "objects":
+            [
+                {
+                "aliases": ["綾小路清隆", "綾小路", "清隆"],
+                "color": "#AFE1AF",
+                "description": "character 0"
+                },
+                {
+                "aliases": ["堀北鈴音", "堀北", "鈴音"],
+                "color": "#FF5733",
+                "description": "character 1"
+                },
+                {
+                "aliases": ["櫛田桔梗", "櫛田", "桔梗"],
+                "color": "#00FFFF",
+                "description": "character 2"
+                }
+            ]
+        },
+        {
+            "name": "second",
+            "objects": 
+            [
+                {
+                "aliases": ["須藤健", "須藤", "健"],
+                "color": "#DFFF00",
+                "description": "character 3"
+                },
+                {
+                "aliases": ["軽井沢恵", "軽井沢", "恵"],
+                "color": "#DF00FF",
+                "description": "character 4"
+                }
+            ]
+        }
+    ]
 }`);
 
 async function saveOptions()
@@ -63,7 +69,7 @@ function saveTextOptions()
 
 function saveTableOptions()
 {
-    settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup] = searchObjectsTable.getData();
+    settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects = searchObjectsTable.getData();
     saveOptions().then(() => {reloadOptions();});
 }
 
@@ -76,17 +82,16 @@ function selectObjectGroup()
 
 function newObjectGroup()
 {
-    if (settingsJSON.searchObjectGroups.newGroup != undefined) { return; }
-    settingsJSON.searchObjectGroups['newGroup'] = [];
-    settingsJSON.currentObjectGroup = 'newGroup';
+    settingsJSON.currentObjectGroup = settingsJSON.searchObjectGroups.push({"name": "newGroup", "objects": []}) - 1;
+    console.log(settingsJSON.currentObjectGroup)
     reloadOptions();
     document.getElementById('save-button').disabled = false;
 }
 
 function deleteObjectGroup()
 {
-    delete settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup];
-    settingsJSON.currentObjectGroup = Object.keys(settingsJSON.searchObjectGroups)[0];
+    settingsJSON.searchObjectGroups.splice(settingsJSON.currentObjectGroup, 1);
+    settingsJSON.currentObjectGroup = 0;
     reloadOptions();
     document.getElementById('save-button').disabled = false;
 }
@@ -101,11 +106,11 @@ function reloadOptions()
     function fillObjectGroups()
     {
         document.getElementById('search-object-groups-select').replaceChildren();
-        for (let key of Object.keys(settingsJSON.searchObjectGroups)) 
+        for (let i = 0; i < settingsJSON.searchObjectGroups.length; i++) 
         {
             var option = document.createElement("option");
-            option.value = key;
-            option.textContent = key;
+            option.value = i;
+            option.textContent = settingsJSON.searchObjectGroups[i].name;
             document.getElementById('search-object-groups-select').appendChild(option);
         }
         document.getElementById('search-object-groups-select').value = settingsJSON.currentObjectGroup;
@@ -113,12 +118,13 @@ function reloadOptions()
 
     function fillOptions()
     {
-        document.getElementById("object-group-name-input").value = settingsJSON.currentObjectGroup;
+        console.log(settingsJSON)
+        document.getElementById("object-group-name-input").value = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name;
     }
 
     function loadTable()
     {
-        searchObjectsTable = createSearchObjectsTable(settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup], "#search-objects-table");
+        searchObjectsTable = createSearchObjectsTable(settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects, "#search-objects-table");
     }
 
     function fillTextarea()
@@ -146,10 +152,7 @@ function resetStorage()
 
 function trackObjectGroupName()
 {
-    var newName = document.getElementById('object-group-name-input').value;
-    var oldName = settingsJSON.currentObjectGroup;
-    delete Object.assign(settingsJSON.searchObjectGroups, {[newName]: settingsJSON.searchObjectGroups[oldName] })[oldName];
-    settingsJSON.currentObjectGroup = document.getElementById('object-group-name-input').value;  
+    settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name = document.getElementById('object-group-name-input').value;
     reloadOptions();
     document.getElementById('save-button').disabled = false;
 }
