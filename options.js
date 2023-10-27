@@ -94,6 +94,7 @@ function deleteObjectGroup()
 function reloadOptions()
 {
     fillObjectGroups();
+    fillOptions();
     loadTable();
     fillTextarea();
 
@@ -110,6 +111,11 @@ function reloadOptions()
         document.getElementById('search-object-groups-select').value = settingsJSON.currentObjectGroup;
     }
 
+    function fillOptions()
+    {
+        document.getElementById("object-group-name-input").value = settingsJSON.currentObjectGroup;
+    }
+
     function loadTable()
     {
         searchObjectsTable = createSearchObjectsTable(settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup], "#search-objects-table");
@@ -120,8 +126,6 @@ function reloadOptions()
         document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
     }
 }
-
-
 
 function restoreOptions()
 {
@@ -140,9 +144,19 @@ function resetStorage()
     window.location.reload();
 }
 
+function trackObjectGroupName()
+{
+    var newName = document.getElementById('object-group-name-input').value;
+    var oldName = settingsJSON.currentObjectGroup;
+    delete Object.assign(settingsJSON.searchObjectGroups, {[newName]: settingsJSON.searchObjectGroups[oldName] })[oldName];
+    settingsJSON.currentObjectGroup = document.getElementById('object-group-name-input').value;  
+    reloadOptions();
+    document.getElementById('save-button').disabled = false;
+}
   
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.getElementById('search-object-groups-select').addEventListener('change', selectObjectGroup)
+document.getElementById('object-group-name-input').addEventListener('input', trackObjectGroupName)
 document.getElementById('save-text-button').addEventListener('click', saveTextOptions);
 document.getElementById('save-button').addEventListener('click', saveOptions);
 document.getElementById('save-table-button').addEventListener('click', saveTableOptions);

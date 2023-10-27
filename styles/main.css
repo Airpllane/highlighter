@@ -60,6 +60,11 @@
     width: fit-content;
 }
 
+.highlighter-options-input
+{
+    width: fit-content;
+}
+
 .highlighter-search-objects-table
 {
     width: 500px;
