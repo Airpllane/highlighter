@@ -53,88 +53,84 @@ async function saveOptions()
             }, 750);
         }
     );
-    fillTextarea();
 }
 
 function saveTextOptions()
 {
     settingsJSON = JSON.parse(document.getElementById("settingsJSON").value);
-    saveOptions().then(() => {loadTable()});
+    saveOptions().then(() => {reloadOptions();});
 }
 
 function saveTableOptions()
 {
     settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup] = searchObjectsTable.getData();
-    saveOptions().then(() => {loadTable()});
+    saveOptions().then(() => {reloadOptions();});
 }
 
 function selectObjectGroup()
 {
     settingsJSON.currentObjectGroup = document.getElementById('search-object-groups-select').value;
-    saveOptions().then(() => {loadTable()});
+    saveOptions().then(() => {reloadOptions();});
     document.getElementById('save-button').disabled = false;
 }
 
 function newObjectGroup()
 {
     if (settingsJSON.searchObjectGroups.newGroup != undefined) { return; }
-    clearObjectGroups();
     settingsJSON.searchObjectGroups['newGroup'] = [];
     settingsJSON.currentObjectGroup = 'newGroup';
-    fillObjectGroups();
-    loadTable();
-    fillTextarea();
+    reloadOptions();
     document.getElementById('save-button').disabled = false;
 }
 
 function deleteObjectGroup()
 {
-    clearObjectGroups();
     delete settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup];
     settingsJSON.currentObjectGroup = Object.keys(settingsJSON.searchObjectGroups)[0];
-    fillObjectGroups();
-    loadTable();
-    fillTextarea();
+    reloadOptions();
     document.getElementById('save-button').disabled = false;
 }
 
-function clearObjectGroups()
+function reloadOptions()
 {
-    document.getElementById('search-object-groups-select').replaceChildren();
+    fillObjectGroups();
+    loadTable();
+    fillTextarea();
+
+    function fillObjectGroups()
+    {
+        document.getElementById('search-object-groups-select').replaceChildren();
+        for (let key of Object.keys(settingsJSON.searchObjectGroups)) 
+        {
+            var option = document.createElement("option");
+            option.value = key;
+            option.textContent = key;
+            document.getElementById('search-object-groups-select').appendChild(option);
+        }
+        document.getElementById('search-object-groups-select').value = settingsJSON.currentObjectGroup;
+    }
+
+    function loadTable()
+    {
+        searchObjectsTable = createSearchObjectsTable(settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup], "#search-objects-table");
+    }
+
+    function fillTextarea()
+    {
+        document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
+    }
 }
 
-function fillObjectGroups()
-{
-    for (let key of Object.keys(settingsJSON.searchObjectGroups)) 
-    {
-        var option = document.createElement("option");
-        option.value = key;
-        option.textContent = key;
-        document.getElementById('search-object-groups-select').appendChild(option);
-    }
-    document.getElementById('search-object-groups-select').value = settingsJSON.currentObjectGroup;
-}
+
 
 function restoreOptions()
 {
     chrome.storage.sync.get("settingsJSON").then((result) =>
     {
         settingsJSON = result.settingsJSON;
-        fillObjectGroups();
-        loadTable();
-        fillTextarea();
+        reloadOptions();
         document.getElementById('save-button').disabled = true;
     });
-}
-
-function fillTextarea()
-{
-    document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
-}
-
-function loadTable()
-{
-    searchObjectsTable = createSearchObjectsTable(settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup], "#search-objects-table");
 }
 
 function resetStorage()
