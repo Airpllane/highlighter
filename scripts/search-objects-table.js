@@ -30,7 +30,8 @@ export function createSearchObjectsTable(tableData, divID)
                         headerSort: false,
                         frozen: true,
                         width: 30,
-                        minWidth: 30
+                        minWidth: 30,
+                        resizable: false
                     },
                     {
                         title: "Aliases",
@@ -42,12 +43,14 @@ export function createSearchObjectsTable(tableData, divID)
                             element.style.fontFamily = "Yu Gothic";
                             element.style.fontSize = "20px";
                             return cell.getValue().join(', ');
-                        }
+                        },
+                        resizable: false
                     },
                     {
                         title: "Description",
                         field: "description",
-                        editor: "input"
+                        editor: "input",
+                        resizable: false
                     },
                     {
                         title: "Color",
@@ -71,7 +74,6 @@ export function createSearchObjectsTable(tableData, divID)
 
                             function onChange()
                             {
-                                console.log(input.value)
                                 if (input.value != cellValue)
                                 {
                                     success(input.value);
@@ -95,8 +97,20 @@ export function createSearchObjectsTable(tableData, divID)
                                 }
                             });
                             return input;
-                        }
-                    }
+                        },
+                        resizable: false
+                    },
+                    {
+                        formatter: "tickCross",
+                        width: 50,
+                        hozAlign: "center",
+                        vertAlign: "middle",
+                        cellClick: (event, cell) => 
+                        {
+                            cell.getRow().delete();
+                        },
+                        resizable: false
+                    },
                 ],
         });
 

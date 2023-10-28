@@ -83,7 +83,6 @@ function selectObjectGroup()
 function newObjectGroup()
 {
     settingsJSON.currentObjectGroup = settingsJSON.searchObjectGroups.push({"name": "newGroup", "objects": []}) - 1;
-    console.log(settingsJSON.currentObjectGroup)
     reloadOptions();
     document.getElementById('save-button').disabled = false;
 }
@@ -118,7 +117,6 @@ function reloadOptions()
 
     function fillOptions()
     {
-        console.log(settingsJSON)
         document.getElementById("object-group-name-input").value = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name;
     }
 
@@ -156,13 +154,23 @@ function trackObjectGroupName()
     reloadOptions();
     document.getElementById('save-button').disabled = false;
 }
+
+function addRow()
+{
+    searchObjectsTable.addData([{ aliases: ["New"], color: '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'), description: "New description" }], false);
+}
   
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.getElementById('search-object-groups-select').addEventListener('change', selectObjectGroup)
-document.getElementById('object-group-name-input').addEventListener('input', trackObjectGroupName)
-document.getElementById('save-text-button').addEventListener('click', saveTextOptions);
-document.getElementById('save-button').addEventListener('click', saveOptions);
+
+
+document.getElementById('add-row-button').addEventListener('click', addRow);
 document.getElementById('save-table-button').addEventListener('click', saveTableOptions);
-document.getElementById('reset-button').addEventListener('click', resetStorage);
+
+document.getElementById('search-object-groups-select').addEventListener('change', selectObjectGroup);
 document.getElementById('new-object-group-button').addEventListener('click', newObjectGroup);
 document.getElementById('delete-object-group-button').addEventListener('click', deleteObjectGroup);
+document.getElementById('object-group-name-input').addEventListener('input', trackObjectGroupName);
+
+document.getElementById('save-text-button').addEventListener('click', saveTextOptions);
+document.getElementById('save-button').addEventListener('click', saveOptions);
+document.getElementById('reset-button').addEventListener('click', resetStorage);
