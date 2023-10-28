@@ -27,8 +27,12 @@
             <textarea id="settingsJSON" style="height: 500px;"></textarea>
             <div>
                 <button id="save-text-button" class="highlighter-options-button">Save from textarea</button>
-                <button id="save-button" class="highlighter-options-button">Apply changes</button>
                 <button id="reset-button" class="highlighter-options-button">Reset</button>
+                <button id="export-button" class="highlighter-options-button">Export</button>
+                <label for="import-input">
+                    <button id="import-button" class="highlighter-options-button" aria-hidden="true">Import</button>
+                    <input type="file" id="import-input" style="display:none">
+              </label>
             </div>
             <div id="status"></div>
         </div>

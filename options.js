@@ -1,5 +1,5 @@
 import "./libs/tabulator/js/tabulator.min.js"
-import {createSearchObjectsTable} from "./scripts/search-objects-table.js"
+import { createSearchObjectsTable } from "./scripts/search-objects-table.js"
 
 var searchObjectsTable = undefined;
 var settingsJSON = undefined;
@@ -53,11 +53,13 @@ async function saveOptions()
 {
     chrome.storage.sync.set(
         { settingsJSON: settingsJSON },
-        () => {
+        () =>
+        {
             const status = document.getElementById('status');
             status.textContent = 'Options saved.';
-            setTimeout(() => {
-            status.textContent = '';
+            setTimeout(() =>
+            {
+                status.textContent = '';
             }, 750);
         }
     );
@@ -66,32 +68,32 @@ async function saveOptions()
 function saveTextOptions()
 {
     settingsJSON = JSON.parse(document.getElementById("settingsJSON").value);
-    saveOptions().then(() => {reloadOptions();});
+    saveOptions().then(() => { reloadOptions(); });
 }
 
 function saveTableOptions()
 {
     settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects = searchObjectsTable.getData();
-    saveOptions().then(() => {reloadOptions();});
+    saveOptions().then(() => { reloadOptions(); });
 }
 
 function selectObjectGroup()
 {
     settingsJSON.currentObjectGroup = document.getElementById('search-object-groups-select').value;
-    saveOptions().then(() => {reloadOptions();});
+    saveOptions().then(() => { reloadOptions(); });
 }
 
 function newObjectGroup()
 {
-    settingsJSON.currentObjectGroup = settingsJSON.searchObjectGroups.push({"name": "newGroup", "objects": []}) - 1;
-    saveOptions().then(() => {reloadOptions();});
+    settingsJSON.currentObjectGroup = settingsJSON.searchObjectGroups.push({ "name": "newGroup", "objects": [] }) - 1;
+    saveOptions().then(() => { reloadOptions(); });
 }
 
 function deleteObjectGroup()
 {
     settingsJSON.searchObjectGroups.splice(settingsJSON.currentObjectGroup, 1);
     settingsJSON.currentObjectGroup = 0;
-    saveOptions().then(() => {reloadOptions();});
+    saveOptions().then(() => { reloadOptions(); });
 }
 
 function reloadOptions()
@@ -126,7 +128,7 @@ function reloadOptions()
             document.getElementById('highlight-type-select').appendChild(option);
         });
         document.getElementById('highlight-type-select').value = settingsJSON.highlightType;
-        
+
         document.getElementById("object-group-name-input").value = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name;
     }
 
@@ -154,14 +156,14 @@ function restoreOptions()
 function resetStorage()
 {
     chrome.storage.sync.clear();
-    chrome.storage.sync.set({settingsJSON: defaultSettings});
+    chrome.storage.sync.set({ settingsJSON: defaultSettings });
     window.location.reload();
 }
 
 function trackObjectGroupName()
 {
     settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name = document.getElementById('object-group-name-input').value;
-    saveOptions().then(() => {reloadOptions();});
+    saveOptions().then(() => { reloadOptions(); });
 }
 
 function addRow()
@@ -172,15 +174,41 @@ function addRow()
 function selectHighlightType()
 {
     settingsJSON.highlightType = document.getElementById('highlight-type-select').value;
-    saveOptions().then(() => {reloadOptions();});
+    saveOptions().then(() => { reloadOptions(); });
 }
 
 function trackLineWidth()
 {
     settingsJSON.lineWidth = document.getElementById('line-width-input').value;
-    saveOptions().then(() => {reloadOptions();});
+    saveOptions().then(() => { reloadOptions(); });
 }
-  
+
+function saveFile(name, content, type)
+{
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([content], { type: type }));
+    link.download = name;
+    link.click();
+    link.remove();
+}
+
+function exportOptions()
+{
+    saveFile('highlighterSettings.json', JSON.stringify(settingsJSON, null, 2), 'text/json');
+}
+
+function importOptions()
+{
+    const reader = new FileReader();
+    reader.onload = (event) => 
+    {
+        settingsJSON = JSON.parse(event.target.result);
+        saveOptions().then(() => { reloadOptions(); });
+        document.getElementById('import-input').value = null;
+    };
+    reader.readAsText(document.getElementById('import-input').files[0]);
+}
+
 document.addEventListener('DOMContentLoaded', restoreOptions);
 
 
@@ -195,5 +223,7 @@ document.getElementById('delete-object-group-button').addEventListener('click', 
 document.getElementById('object-group-name-input').addEventListener('input', trackObjectGroupName);
 
 document.getElementById('save-text-button').addEventListener('click', saveTextOptions);
-document.getElementById('save-button').addEventListener('click', saveOptions);
 document.getElementById('reset-button').addEventListener('click', resetStorage);
+document.getElementById('import-button').addEventListener('click', () => { document.getElementById('import-input').click(); });
+document.getElementById('import-input').addEventListener('change', importOptions);
+document.getElementById('export-button').addEventListener('click', exportOptions);
