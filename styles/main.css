@@ -22,7 +22,7 @@
 
 .highlighter-table-container
 {
-    width: 500px;
+    width: 750px;
     margin-right: 10px;
     display: flex;
     flex-flow: column;
@@ -67,7 +67,7 @@
 
 .highlighter-search-objects-table
 {
-    width: 500px;
+    width: 750px;
 }
 
 .highlighter-title

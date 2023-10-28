@@ -5,7 +5,6 @@ export function createSearchObjectsTable(tableData, divID)
             layout: "fitColumns",
             data: tableData,
             height: 500,
-            movableColumns: true,
             movableRows: true,
             rowContextMenu: [
                 {
@@ -25,6 +24,14 @@ export function createSearchObjectsTable(tableData, divID)
             ],
             columns:
                 [
+                    {
+                        rowHandle: true,
+                        formatter: "handle",
+                        headerSort: false,
+                        frozen: true,
+                        width: 30,
+                        minWidth: 30
+                    },
                     {
                         title: "Aliases",
                         field: "aliases",
