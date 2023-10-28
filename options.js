@@ -5,6 +5,8 @@ var searchObjectsTable = undefined;
 var settingsJSON = undefined;
 const defaultSettings = JSON.parse(`{
     "currentObjectGroup": "0",
+    "highlightType": "underline",
+    "lineWidth": "2",
     "searchObjectGroups": 
     [
         {
@@ -77,22 +79,19 @@ function selectObjectGroup()
 {
     settingsJSON.currentObjectGroup = document.getElementById('search-object-groups-select').value;
     saveOptions().then(() => {reloadOptions();});
-    document.getElementById('save-button').disabled = false;
 }
 
 function newObjectGroup()
 {
     settingsJSON.currentObjectGroup = settingsJSON.searchObjectGroups.push({"name": "newGroup", "objects": []}) - 1;
-    reloadOptions();
-    document.getElementById('save-button').disabled = false;
+    saveOptions().then(() => {reloadOptions();});
 }
 
 function deleteObjectGroup()
 {
     settingsJSON.searchObjectGroups.splice(settingsJSON.currentObjectGroup, 1);
     settingsJSON.currentObjectGroup = 0;
-    reloadOptions();
-    document.getElementById('save-button').disabled = false;
+    saveOptions().then(() => {reloadOptions();});
 }
 
 function reloadOptions()
@@ -117,6 +116,17 @@ function reloadOptions()
 
     function fillOptions()
     {
+        document.getElementById('highlight-type-select').replaceChildren();
+        document.getElementById('line-width-input').value = settingsJSON.lineWidth;
+        ['background', 'underline'].forEach((highlightType) =>
+        {
+            var option = document.createElement("option");
+            option.value = highlightType;
+            option.textContent = highlightType;
+            document.getElementById('highlight-type-select').appendChild(option);
+        });
+        document.getElementById('highlight-type-select').value = settingsJSON.highlightType;
+        
         document.getElementById("object-group-name-input").value = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name;
     }
 
@@ -151,13 +161,24 @@ function resetStorage()
 function trackObjectGroupName()
 {
     settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name = document.getElementById('object-group-name-input').value;
-    reloadOptions();
-    document.getElementById('save-button').disabled = false;
+    saveOptions().then(() => {reloadOptions();});
 }
 
 function addRow()
 {
     searchObjectsTable.addData([{ aliases: ["New"], color: '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'), description: "New description" }], false);
+}
+
+function selectHighlightType()
+{
+    settingsJSON.highlightType = document.getElementById('highlight-type-select').value;
+    saveOptions().then(() => {reloadOptions();});
+}
+
+function trackLineWidth()
+{
+    settingsJSON.lineWidth = document.getElementById('line-width-input').value;
+    saveOptions().then(() => {reloadOptions();});
 }
   
 document.addEventListener('DOMContentLoaded', restoreOptions);
@@ -166,6 +187,8 @@ document.addEventListener('DOMContentLoaded', restoreOptions);
 document.getElementById('add-row-button').addEventListener('click', addRow);
 document.getElementById('save-table-button').addEventListener('click', saveTableOptions);
 
+document.getElementById('line-width-input').addEventListener('input', trackLineWidth);
+document.getElementById('highlight-type-select').addEventListener('change', selectHighlightType);
 document.getElementById('search-object-groups-select').addEventListener('change', selectObjectGroup);
 document.getElementById('new-object-group-button').addEventListener('click', newObjectGroup);
 document.getElementById('delete-object-group-button').addEventListener('click', deleteObjectGroup);

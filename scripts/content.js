@@ -1,14 +1,29 @@
 console.log("START");
 var isActive = false;
 
+var settingsJSON;
 var searchObjects;
+
+var showActions = {
+    "background": (element) => {element.style.backgroundColor = searchObjects[element.getAttribute("data-search-object-id")].color;},
+    "underline": (element) => {
+        element.style.textDecoration = "underline";
+        element.style.textDecorationColor = searchObjects[element.getAttribute("data-search-object-id")].color;
+        element.style.textDecorationThickness = settingsJSON.lineWidth + 'px';
+    }
+}
+
+var hideActions = {
+    "background": (element) => {element.style.backgroundColor = "#00000000";},
+    "underline": (element) => {
+        element.style.textDecoration = "none";
+    }
+}
 
 chrome.storage.sync.get(["settingsJSON"]).then((result) =>
 {
-    searchObjects =
-        result.settingsJSON.searchObjectGroups[
-        result.settingsJSON.currentObjectGroup
-        ];
+    settingsJSON = result.settingsJSON;
+    searchObjects = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects;
     highlightAll();
 });
 
@@ -74,15 +89,15 @@ function highlightNode(node, nodeDataArray)
             nodeData.endIndex
         );
         let markedNode = document.createElement("span");
-        markedNode.className = "search-object";
+        markedNode.className = "search-object"; //fix
         markedNode.setAttribute(
             "data-search-object-id",
             nodeData.searchObjectID
         );
         markedNode.appendChild(document.createTextNode(markedText));
-        markedNode.style.backgroundColor =
-            searchObjects[nodeData.searchObjectID].color;
-
+        
+        showActions[settingsJSON.highlightType](markedNode);
+        
         markedNode.onmouseover = (event) =>
         {
             if (!isActive) return;
@@ -138,8 +153,7 @@ function showAll()
     if (isActive) return;
     document.querySelectorAll(".search-object").forEach((element) =>
     {
-        element.style.backgroundColor =
-            searchObjects[element.getAttribute("data-search-object-id")].color;
+        showActions[settingsJSON.highlightType](element);
     });
     isActive = !isActive;
 }
@@ -149,7 +163,7 @@ function clearAll()
     if (!isActive) return;
     document.querySelectorAll(".search-object").forEach((element) =>
     {
-        element.style.backgroundColor = "#00000000";
+        hideActions[settingsJSON.highlightType](element);
     });
     isActive = !isActive;
 }
