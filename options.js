@@ -1,4 +1,4 @@
-import "./libs/tabulator/js/tabulator.min.js"
+import "./node_modules/tabulator-tables/dist/js/tabulator.js";
 import { createSearchObjectsTable } from "./scripts/search-objects-table.js"
 
 var searchObjectsTable = undefined;
@@ -149,7 +149,6 @@ function restoreOptions()
     {
         settingsJSON = result.settingsJSON;
         reloadOptions();
-        document.getElementById('save-button').disabled = true;
     });
 }
 
