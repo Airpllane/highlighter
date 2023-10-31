@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  class="sl-theme-dark">
     <head>
         <title>My Test Extension Options</title>
     </head>
@@ -8,38 +8,41 @@
         <div class="highlighter-table-container">
             <div class="highlighter-title">Search objects</div>
             <div id="search-objects-table" class="highlighter-search-objects-table"></div>
-            <div>
-                <button id="add-row-button" class="highlighter-options-button">Add row</button>
-                <button id="save-table-button" class="highlighter-options-button">Save</button>
+            <div style="margin-top: 10px; display: flex; gap: 10px;">
+                <sl-button id="add-row-button" class="highlighter-options-button">Add row</sl-button>
+                <sl-button id="save-table-button" class="highlighter-options-button">Save</sl-button>
             </div>
         </div>
         <div class="highlighter-options-container">
             <div class="highlighter-title">Options</div>   
-            <label>Highlight type: <select id="highlight-type-select" class="highlighter-options-select"></select></label>
-            <label>Line width: <input id="line-width-input" type="number" class="highlighter-options-input" min="1" max="5"></label>
-            <div>                
-                <button id="new-object-group-button" class="highlighter-options-button">New group</button>
-                <button id="delete-object-group-button" class="highlighter-options-button">Delete group</button>
-                <select id="search-object-groups-select" class="highlighter-options-select"></select>
+            <sl-select label="Highlight type:" id="highlight-type-select" class="highlighter-options-select"></sl-select>
+            <sl-input label="Line width:" id="line-width-input" type="number" class="highlighter-options-input" min="1" max="5"></sl-input>
+            <div style="display: flex; align-items: center;">
+                <sl-select label="Current group:" id="search-object-groups-select" class="highlighter-options-select"></sl-select>
+                <sl-icon-button name="plus-square" id="new-object-group-button" class="highlighter-options-button" style="font-size: 1.5rem; position: relative; top: 11px;">New group</sl-icon-button >
+                <sl-icon-button name="trash" id="delete-object-group-button" class="highlighter-options-button" style="font-size: 1.5rem; position: relative; top: 11px;">Delete group</sl-icon-button >
             </div>
-            <label>Object group name: <input id="object-group-name-input" type="text" class="highlighter-options-input" maxlength="20"></label>
+            <label>Object group name: <sl-input id="object-group-name-input" type="text" class="highlighter-options-input" maxlength="20"></label>
             <div class="highlighter-title">JSON</div>
-            <textarea id="settingsJSON" style="height: 500px;"></textarea>
-            <div>
-                <button id="save-text-button" class="highlighter-options-button">Save from textarea</button>
-                <button id="reset-button" class="highlighter-options-button">Reset</button>
-                <button id="export-button" class="highlighter-options-button">Export</button>
+            <sl-textarea id="settingsJSON" resize="none" rows="21"></sl-textarea>
+            <div style="margin-top: 10px; display: flex; gap: 10px;">
+                <sl-button id="save-text-button" class="highlighter-options-button">Save from textarea</sl-button>
+                <sl-button id="reset-button" class="highlighter-options-button">Reset</sl-button>
+                <sl-button id="export-button" class="highlighter-options-button">Export</sl-button>
                 <label for="import-input">
-                    <button id="import-button" class="highlighter-options-button" aria-hidden="true">Import</button>
+                    <sl-button id="import-button" class="highlighter-options-button" aria-hidden="true">Import</sl-button>
                     <input type="file" id="import-input" style="display:none">
-              </label>
+                </label>
             </div>
             <div id="status"></div>
         </div>
     </div>
 
-    <link href="node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <link href="node_modules/tabulator-tables/dist/css/tabulator_midnight.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
     <script src="options.js" type="module"></script>
+
+    <link rel="stylesheet" href="./node_modules/@shoelace-style/shoelace/cdn/themes/dark.css" />
+    <script type="module" src="./node_modules/@shoelace-style/shoelace/cdn/shoelace.js"></script>
     </body>
 </html>

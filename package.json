@@ -14,6 +14,7 @@
   },
   "homepage": "https://github.com/Airpllane/highlighter#readme",
   "dependencies": {
+    "@shoelace-style/shoelace": "^2.11.2",
     "tabulator-tables": "^5.5.2"
   }
 }

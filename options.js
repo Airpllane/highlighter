@@ -85,14 +85,14 @@ function selectObjectGroup()
 
 function newObjectGroup()
 {
-    settingsJSON.currentObjectGroup = settingsJSON.searchObjectGroups.push({ "name": "newGroup", "objects": [] }) - 1;
+    settingsJSON.currentObjectGroup = (settingsJSON.searchObjectGroups.push({ "name": "newGroup", "objects": [] }) - 1).toString();
     saveOptions().then(() => { reloadOptions(); });
 }
 
 function deleteObjectGroup()
 {
     settingsJSON.searchObjectGroups.splice(settingsJSON.currentObjectGroup, 1);
-    settingsJSON.currentObjectGroup = 0;
+    settingsJSON.currentObjectGroup = "0";
     saveOptions().then(() => { reloadOptions(); });
 }
 
@@ -108,11 +108,12 @@ function reloadOptions()
         document.getElementById('search-object-groups-select').replaceChildren();
         for (let i = 0; i < settingsJSON.searchObjectGroups.length; i++) 
         {
-            var option = document.createElement("option");
-            option.value = i;
-            option.textContent = settingsJSON.searchObjectGroups[i].name;
+            var option = document.createElement("sl-option");
+            option.value = i.toString();
+            option.innerText = settingsJSON.searchObjectGroups[i].name;
             document.getElementById('search-object-groups-select').appendChild(option);
         }
+        console.log(settingsJSON.currentObjectGroup);
         document.getElementById('search-object-groups-select').value = settingsJSON.currentObjectGroup;
     }
 
@@ -122,9 +123,9 @@ function reloadOptions()
         document.getElementById('line-width-input').value = settingsJSON.lineWidth;
         ['background', 'underline'].forEach((highlightType) =>
         {
-            var option = document.createElement("option");
+            var option = document.createElement("sl-option");
             option.value = highlightType;
-            option.textContent = highlightType;
+            option.innerText = highlightType;
             document.getElementById('highlight-type-select').appendChild(option);
         });
         document.getElementById('highlight-type-select').value = settingsJSON.highlightType;
@@ -215,8 +216,8 @@ document.getElementById('add-row-button').addEventListener('click', addRow);
 document.getElementById('save-table-button').addEventListener('click', saveTableOptions);
 
 document.getElementById('line-width-input').addEventListener('input', trackLineWidth);
-document.getElementById('highlight-type-select').addEventListener('change', selectHighlightType);
-document.getElementById('search-object-groups-select').addEventListener('change', selectObjectGroup);
+document.getElementById('highlight-type-select').addEventListener('sl-change', selectHighlightType);
+document.getElementById('search-object-groups-select').addEventListener('sl-change', selectObjectGroup);
 document.getElementById('new-object-group-button').addEventListener('click', newObjectGroup);
 document.getElementById('delete-object-group-button').addEventListener('click', deleteObjectGroup);
 document.getElementById('object-group-name-input').addEventListener('input', trackObjectGroupName);

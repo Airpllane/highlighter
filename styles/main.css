@@ -1,3 +1,7 @@
+body {
+    font-family: var(--sl-font-sans);
+}
+
 .searchObjectTooltip 
 {
     position: absolute;
@@ -33,26 +37,6 @@
     width: 100%;
     display: flex;
     flex-flow: column;
-}
-
-.highlighter-options-button
-{
-    margin: 5px;
-    padding: 5px;
-    color: white;
-    background-color: #2e2e2e;
-    border-radius: 5px;
-    width: fit-content;
-}
-
-.highlighter-options-button:disabled
-{
-    margin: 5px;
-    padding: 5px;
-    color: white;
-    background-color: darkgray;
-    border-radius: 5px;
-    width: fit-content;
 }
 
 .highlighter-options-select
