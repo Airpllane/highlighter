@@ -24,7 +24,7 @@ chrome.storage.sync.get(["settingsJSON"]).then((result) =>
 {
     settingsJSON = result.settingsJSON;
     searchObjects = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects;
-    highlightAll();
+    //highlightAll();
 });
 
 document.onkeydown = (event) =>
