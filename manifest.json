@@ -38,6 +38,6 @@
         }
     ],
     "permissions": [
-        "storage", "declarativeContent", "activeTab", "scripting"
+        "storage", "activeTab", "scripting"
     ]
 }
