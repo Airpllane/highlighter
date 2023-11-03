@@ -1,12 +1,17 @@
-console.log("START");
+console.log("content.js loaded");
 var isActive = false;
 
 var settingsJSON;
 var searchObjects;
 
 var showActions = {
-    "background": (element) => {element.style.backgroundColor = searchObjects[element.getAttribute("data-search-object-id")].color;},
-    "underline": (element) => {
+    "background": (element) => 
+    {
+        element.style.backgroundColor = searchObjects[element.getAttribute("data-search-object-id")].color
+            + Math.round(settingsJSON.opacity * 255).toString(16).padStart(2, '0').toUpperCase();
+    },
+    "underline": (element) => 
+    {
         element.style.textDecoration = "underline";
         element.style.textDecorationColor = searchObjects[element.getAttribute("data-search-object-id")].color;
         element.style.textDecorationThickness = settingsJSON.lineWidth + 'px';
@@ -14,8 +19,12 @@ var showActions = {
 }
 
 var hideActions = {
-    "background": (element) => {element.style.backgroundColor = "#00000000";},
-    "underline": (element) => {
+    "background": (element) => 
+    {
+        element.style.backgroundColor = "#00000000";
+    },
+    "underline": (element) =>
+    {
         element.style.textDecoration = "none";
     }
 }
@@ -24,7 +33,6 @@ chrome.storage.sync.get(["settingsJSON"]).then((result) =>
 {
     settingsJSON = result.settingsJSON;
     searchObjects = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects;
-    //highlightAll();
 });
 
 document.onkeydown = (event) =>
@@ -95,9 +103,9 @@ function highlightNode(node, nodeDataArray)
             nodeData.searchObjectID
         );
         markedNode.appendChild(document.createTextNode(markedText));
-        
+
         showActions[settingsJSON.highlightType](markedNode);
-        
+
         markedNode.onmouseover = (event) =>
         {
             if (!isActive) return;

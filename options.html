@@ -17,6 +17,9 @@
             <div class="highlighter-title">Options</div>   
             <sl-select label="Highlight type:" id="highlight-type-select" class="highlighter-options-select"></sl-select>
             <sl-input label="Line width:" id="line-width-input" type="number" class="highlighter-options-input" min="1" max="5"></sl-input>
+            <sl-input label="Opacity:" id="opacity-percent-input" type="number" class="highlighter-options-input" min="0" max="100">
+                <sl-icon name="percent" slot="suffix"></sl-icon>
+            </sl-input>
             <div style="display: flex; align-items: center;">
                 <sl-select label="Current group:" id="search-object-groups-select" class="highlighter-options-select"></sl-select>
                 <sl-icon-button name="plus-square" id="new-object-group-button" class="highlighter-options-button" style="font-size: 1.5rem; position: relative; top: 11px;">New group</sl-icon-button >

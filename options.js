@@ -7,6 +7,7 @@ const defaultSettings = JSON.parse(`{
     "currentObjectGroup": "0",
     "highlightType": "underline",
     "lineWidth": "2",
+    "opacity": "0.5",
     "searchObjectGroups": 
     [
         {
@@ -121,6 +122,7 @@ function reloadOptions()
     {
         document.getElementById('highlight-type-select').replaceChildren();
         document.getElementById('line-width-input').value = settingsJSON.lineWidth;
+        document.getElementById('opacity-percent-input').value = settingsJSON.opacity * 100;
         ['background', 'underline'].forEach((highlightType) =>
         {
             var option = document.createElement("sl-option");
@@ -183,6 +185,12 @@ function trackLineWidth()
     saveOptions().then(() => { reloadOptions(); });
 }
 
+function trackOpacity()
+{
+    settingsJSON.opacity = document.getElementById('opacity-percent-input').value / 100;
+    saveOptions().then(() => { reloadOptions(); });
+}
+
 function saveFile(name, content, type)
 {
     const link = document.createElement('a');
@@ -216,6 +224,7 @@ document.getElementById('add-row-button').addEventListener('click', addRow);
 document.getElementById('save-table-button').addEventListener('click', saveTableOptions);
 
 document.getElementById('line-width-input').addEventListener('input', trackLineWidth);
+document.getElementById('opacity-percent-input').addEventListener('input', trackOpacity);
 document.getElementById('highlight-type-select').addEventListener('sl-change', selectHighlightType);
 document.getElementById('search-object-groups-select').addEventListener('sl-change', selectObjectGroup);
 document.getElementById('new-object-group-button').addEventListener('click', newObjectGroup);
