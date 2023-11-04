@@ -44,6 +44,8 @@ document.onkeydown = (event) =>
     }
 };
 
+setTimeout(highlightAll, 500);
+
 function highlightSubstringNodes(nodesWithCoordinates)
 {
     function groupByNode(nodesWithCoordinates)
@@ -67,6 +69,17 @@ function highlightSubstringNodes(nodesWithCoordinates)
     nodeGroups.forEach((nodeDataArray, node) =>
     {
         highlightNode(node, nodeDataArray);
+    });
+}
+
+function removeSearchObjects() {
+    var searchObjects = document.querySelectorAll('.search-object');
+
+    searchObjects.forEach(function(object) {
+        var textContent = object.textContent;
+        var parent = object.parentNode;
+        var textNode = document.createTextNode(textContent);
+        parent.replaceChild(textNode, object);
     });
 }
 
@@ -151,9 +164,10 @@ function switchActive()
 
 function highlightAll()
 {
-    if (isActive) return;
+    removeSearchObjects();
     highlightSubstringNodes(search(document, searchObjects.map((searchObject) => searchObject.aliases)));
-    isActive = !isActive;
+    isActive = false;
+    showAll();
 }
 
 function showAll()
