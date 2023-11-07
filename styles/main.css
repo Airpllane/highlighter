@@ -1,7 +1,3 @@
-body {
-    font-family: var(--sl-font-sans);
-}
-
 .searchObjectTooltip 
 {
     position: absolute;
@@ -10,6 +6,7 @@ body {
     border: 1px dotted black;
     background-color: #2e2e2e;
     color: aliceblue;
+    font-family: var(--sl-font-sans);
     font-size: large;
 }
 
