@@ -122,7 +122,7 @@ function reloadOptions()
     {
         document.getElementById('highlight-type-select').replaceChildren();
         document.getElementById('line-width-input').value = settingsJSON.lineWidth;
-        document.getElementById('opacity-percent-input').value = settingsJSON.opacity * 100;
+        document.getElementById('opacity-percent-input').value = Math.round(settingsJSON.opacity * 100);
         ['background', 'underline'].forEach((highlightType) =>
         {
             var option = document.createElement("sl-option");
