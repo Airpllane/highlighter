@@ -29,11 +29,7 @@ var hideActions = {
     }
 }
 
-chrome.storage.local.get(["settingsJSON"]).then((result) =>
-{
-    settingsJSON = result.settingsJSON;
-    searchObjects = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects;
-});
+loadSettings();
 
 document.onkeydown = (event) =>
 {
@@ -45,6 +41,15 @@ document.onkeydown = (event) =>
 };
 
 setTimeout(highlightAll, 500);
+
+function loadSettings()
+{
+    chrome.storage.local.get(["settingsJSON"]).then((result) =>
+    {
+        settingsJSON = result.settingsJSON;
+        searchObjects = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects;
+    });
+}
 
 function highlightSubstringNodes(nodesWithCoordinates)
 {
@@ -165,6 +170,7 @@ function switchActive()
 function highlightAll()
 {
     removeSearchObjects();
+    loadSettings();
     highlightSubstringNodes(search(document, searchObjects.map((searchObject) => searchObject.aliases)));
     isActive = false;
     showAll();
