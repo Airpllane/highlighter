@@ -52,7 +52,7 @@ const defaultSettings = JSON.parse(`{
 
 async function saveOptions()
 {
-    chrome.storage.sync.set(
+    chrome.storage.local.set(
         { settingsJSON: settingsJSON },
         () =>
         {
@@ -148,7 +148,7 @@ function reloadOptions()
 
 function restoreOptions()
 {
-    chrome.storage.sync.get("settingsJSON").then((result) =>
+    chrome.storage.local.get("settingsJSON").then((result) =>
     {
         settingsJSON = result.settingsJSON;
         reloadOptions();
@@ -157,8 +157,8 @@ function restoreOptions()
 
 function resetStorage()
 {
-    chrome.storage.sync.clear();
-    chrome.storage.sync.set({ settingsJSON: defaultSettings });
+    chrome.storage.local.clear();
+    chrome.storage.local.set({ settingsJSON: defaultSettings });
     window.location.reload();
 }
 

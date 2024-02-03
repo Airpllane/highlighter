@@ -29,7 +29,7 @@ var hideActions = {
     }
 }
 
-chrome.storage.sync.get(["settingsJSON"]).then((result) =>
+chrome.storage.local.get(["settingsJSON"]).then((result) =>
 {
     settingsJSON = result.settingsJSON;
     searchObjects = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].objects;
