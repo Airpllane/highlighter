@@ -3,11 +3,15 @@ import { createSearchObjectsTable } from "./scripts/search-objects-table.js"
 
 var searchObjectsTable = undefined;
 var settingsJSON = undefined;
+var styleElement = document.createElement('style');
+document.head.appendChild(styleElement);
+
 const defaultSettings = JSON.parse(`{
     "currentObjectGroup": "0",
     "highlightType": "underline",
     "lineWidth": "2",
     "opacity": "0.5",
+    "cjkFont": "Yu_Gothic_Light",
     "searchObjectGroups": 
     [
         {
@@ -57,11 +61,6 @@ async function saveOptions()
         () =>
         {
             const status = document.getElementById('status');
-            status.textContent = 'Options saved.';
-            setTimeout(() =>
-            {
-                status.textContent = '';
-            }, 750);
         }
     );
 }
@@ -102,6 +101,7 @@ function reloadOptions()
     fillObjectGroups();
     fillOptions();
     loadTable();
+    setCJKFont();
     fillTextarea();
 
     function fillObjectGroups()
@@ -120,9 +120,10 @@ function reloadOptions()
 
     function fillOptions()
     {
-        document.getElementById('highlight-type-select').replaceChildren();
         document.getElementById('line-width-input').value = settingsJSON.lineWidth;
         document.getElementById('opacity-percent-input').value = Math.round(settingsJSON.opacity * 100);
+
+        document.getElementById('highlight-type-select').replaceChildren();
         ['background', 'underline'].forEach((highlightType) =>
         {
             var option = document.createElement("sl-option");
@@ -133,6 +134,16 @@ function reloadOptions()
         document.getElementById('highlight-type-select').value = settingsJSON.highlightType;
 
         document.getElementById("object-group-name-input").value = settingsJSON.searchObjectGroups[settingsJSON.currentObjectGroup].name;
+
+        document.getElementById('cjk-font-select').replaceChildren();
+        ['Yu_Gothic_Light', 'Yu_Gothic_Medium'].forEach((font) =>
+        {
+            var option = document.createElement("sl-option");
+            option.value = font;
+            option.innerText = font;
+            document.getElementById('cjk-font-select').appendChild(option);
+        });
+        document.getElementById('cjk-font-select').value = settingsJSON.cjkFont;
     }
 
     function loadTable()
@@ -143,6 +154,17 @@ function reloadOptions()
     function fillTextarea()
     {
         document.getElementById('settingsJSON').value = JSON.stringify(settingsJSON, null, 2);
+    }
+
+    function setCJKFont()
+    {
+        styleElement.innerHTML = "\
+        @font-face {\
+            font-family: \"CJKOverride\";\
+            src: local(\"" + settingsJSON.cjkFont.replaceAll("_", " ") + "\");\
+            unicode-range: U+3000-303F, U+3040-309F, U+30A0-30FF, U+FF00-FFEF, U+4E00-9FAF;\
+        }\
+        ";
     }
 }
 
@@ -176,6 +198,12 @@ function addRow()
 function selectHighlightType()
 {
     settingsJSON.highlightType = document.getElementById('highlight-type-select').value;
+    saveOptions().then(() => { reloadOptions(); });
+}
+
+function selectCJKFont()
+{
+    settingsJSON.cjkFont = document.getElementById('cjk-font-select').value;
     saveOptions().then(() => { reloadOptions(); });
 }
 
@@ -230,6 +258,7 @@ document.getElementById('search-object-groups-select').addEventListener('sl-chan
 document.getElementById('new-object-group-button').addEventListener('click', newObjectGroup);
 document.getElementById('delete-object-group-button').addEventListener('click', deleteObjectGroup);
 document.getElementById('object-group-name-input').addEventListener('input', trackObjectGroupName);
+document.getElementById('cjk-font-select').addEventListener('sl-change', selectCJKFont);
 
 document.getElementById('save-text-button').addEventListener('click', saveTextOptions);
 document.getElementById('reset-button').addEventListener('click', resetStorage);

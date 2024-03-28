@@ -40,7 +40,7 @@ export function createSearchObjectsTable(tableData, divID)
                         formatter: function (cell)
                         {
                             var element = cell.getElement();
-                            element.style.fontFamily = "Yu Gothic";
+                            element.style.fontFamily = "CJKOverride";
                             element.style.fontSize = "20px";
                             return cell.getValue().join(', ');
                         },
@@ -180,7 +180,7 @@ function aliasesEditor(cell, onRendered, success, cancel)
                     input.style.padding = "4px";
                     input.style.width = "100%";
                     input.style.boxSizing = "border-box";
-                    input.style.fontFamily = "Yu Gothic";
+                    input.style.fontFamily = "CJKOverride";
                     input.style.fontSize = "20px";
 
                     if (editorParams.elementAttributes && typeof editorParams.elementAttributes == "object")
@@ -260,7 +260,7 @@ function aliasesEditor(cell, onRendered, success, cancel)
                 formatter: function (cell)
                 {
                     var element = cell.getElement();
-                    element.style.fontFamily = "Yu Gothic";
+                    element.style.fontFamily = "CJKOverride";
                     element.style.fontSize = "20px";
                     return cell.getValue();
                 }

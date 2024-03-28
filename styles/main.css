@@ -49,6 +49,7 @@
 .highlighter-search-objects-table
 {
     width: 750px;
+    flex: 90%;
 }
 
 .highlighter-title
@@ -56,6 +57,7 @@
     font-size: large;
     font-weight: bold;
     margin: auto;
+    flex: 5%;
 }
 
 @media screen and (max-width: 1500px)

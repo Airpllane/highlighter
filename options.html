@@ -25,7 +25,8 @@
                 <sl-icon-button name="plus-square" id="new-object-group-button" class="highlighter-options-button" style="font-size: 1.5rem; position: relative; top: 11px;">New group</sl-icon-button >
                 <sl-icon-button name="trash" id="delete-object-group-button" class="highlighter-options-button" style="font-size: 1.5rem; position: relative; top: 11px;">Delete group</sl-icon-button >
             </div>
-            <label>Object group name: <sl-input id="object-group-name-input" type="text" class="highlighter-options-input" maxlength="20"></label>
+            <sl-input label="Object group name:" id="object-group-name-input" type="text" class="highlighter-options-input" maxlength="20"></sl-input>
+            <sl-select label="CJK Font:" id="cjk-font-select" class="highlighter-options-select"></sl-select>
             <div class="highlighter-title">JSON</div>
             <sl-textarea id="settingsJSON" resize="none" rows="21"></sl-textarea>
             <div style="margin-top: 10px; display: flex; gap: 10px;">
@@ -37,7 +38,6 @@
                     <input type="file" id="import-input" style="display:none">
                 </label>
             </div>
-            <div id="status"></div>
         </div>
     </div>
 
